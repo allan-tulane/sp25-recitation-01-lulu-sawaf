@@ -33,8 +33,16 @@ def _binary_search(mylist, key, left, right):
 	  index of key in mylist, or -1 if not present.
 	"""
 	### TODO
-
-	###
+	if left > right:	#no key, return -1
+		return -1 
+	middle = (left + right) // 2 #value in the middle of all values, // divide for integers
+	if mylist[middle] == key: #key is found, return key
+		return middle
+	elif mylist[middle] > key: #if middle > key search the val next to it, on the left (middle -1)
+		return _binary_search(mylist, key, left, middle-1)
+	else: #else, if middle is not > key, search the val next to it, on the right (middle +1)
+		return _binary_search(mylist, key, middle+1, right)
+		###
 
 
 
@@ -58,7 +66,12 @@ def time_search(search_fn, mylist, key):
 	  search function on this input.
 	"""
 	### TODO
-
+	
+	#print the time, perform the function, and print end time
+	start = time.time()
+	search_fn(mylist, key)
+	end = time.time()
+	return (end - start) * 1000 #mult by 1000 for num milliseconds
 	###
 
 def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
@@ -77,7 +90,14 @@ def compare_search(sizes=[1e1, 1e2, 1e3, 1e4, 1e5, 1e6, 1e7]):
 	  for each method to run on each value of n
 	"""
 	### TODO
-
+	results = []
+	for n in sizes:
+		n = int(n)
+		key = -1 
+		linear_search_time = time_search(linear_search, list(range(n)), key) #time for linear
+		binary_search_time = time_search(binary_search, list(range(n)), key) #time for binary
+		results.append((n, linear_search_time, binary_search_time)) #add results to respective values
+	return results
 	###
 
 def print_results(results):
@@ -87,3 +107,4 @@ def print_results(results):
 							floatfmt=".3f",
 							tablefmt="github"))
 
+print_results(compare_search())
